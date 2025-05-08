@@ -43,7 +43,7 @@ const createStuff = async(req,res)=>{
 
     await newStudent.save()
 
-    return res.status(200).json({message: "Category created"})
+    return res.status(200).json({message: "Student created"})
 }
 
 module.exports = {userVoting,createStuff}
