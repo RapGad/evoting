@@ -9,7 +9,6 @@ const voteRouter = require('../routes/vote.route')
 const PORT = process.env.PORT || 5002
 
 const app = express()
-app.use(express.json())
 const allowedOrigins = [
     'https://jah-register.netlify.app/',  // Replace with your actual frontend URL
     'http://localhost:5173'               // Optional: for local development
@@ -29,6 +28,8 @@ const allowedOrigins = [
   };
   
   app.use(cors(corsOptions));
+  app.use(express.json())
+
 
 
 app.use('/api/auth' ,authRouter)
