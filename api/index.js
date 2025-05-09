@@ -1,10 +1,10 @@
+const serverless = require('serverless-http');
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const connectDb = require('../lib/db')
 const authRouter = require('../routes/auth.route')
 const voteRouter = require('../routes/vote.route')
-const serverless = require('serverless-http');
 
 
 const PORT = process.env.PORT || 5002
