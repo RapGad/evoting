@@ -1,6 +1,6 @@
 const Student = require('../models/student')
 const generateOtP = require('../utils/otpGen')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const Otp = require('../models/Otp')
 const sendOtpMessage = require('../utils/sendSms')
 const jwt = require('jsonwebtoken')
