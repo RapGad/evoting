@@ -16,13 +16,9 @@ const StudentSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId], // or [mongoose.Schema.Types.ObjectId] if you're using category IDs
         default: []
       },
-    gender:{
-        type: String,
-        default: ""
-    },
     hostel:{
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        //required: true
     }
 })
 

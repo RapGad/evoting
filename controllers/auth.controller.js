@@ -42,15 +42,14 @@ const sendOtp = async(req,res)=>{
         const hashOtp = await bcrypt.hash(otp, 10)
         const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
-        const message = `Dear, ${student.name} your OTP is ${otp}.Please do not share this with anyone, this OTP expires in 5minutes
-         Your Vote is your Power`
+        const message = `Dear, ${student.name} your OTP is ${otp}.Please do not share this with anyone, this OTP expires in 5minutes.Your Vote is your Power`
 
     
     
         //send OTP before saving
-        const response = await sendOtpMessage(student.phone, message)
-        if(response.code !== "ok") return res.status(400).json({message: "Code not sent"})
-    
+        //const response = await sendOtpMessage(student.phone, message)
+        //if(!response.success) return res.status(400).json({message: "Code not sent"})
+        console.log(otp)
         const newOtp = new Otp({
             indexNumber: student.indexNumber,
             otp: hashOtp,
@@ -107,8 +106,12 @@ const verifyOtp = async( req, res)=>{
             process.env.JWT_SECRET,
             { expiresIn: '2h' }
         )
+        const studentData = {
+            name: student.name,
+            hostel: student.hostel
+        }
         
-        return res.status(200).json({message: "Login successful", token,name: student.name})
+        return res.status(200).json({message: "Login successful", token,studentData})
     } catch (error) {
         console.log(error)
         return res.status(500).json({message: "Internal Server error"})

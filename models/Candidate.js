@@ -6,11 +6,7 @@ const CandidateSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category"
     },
-    class: String,
-    votes: {
-        type: Number,
-        default: 0
-    }
+    image: String
 })
 
 

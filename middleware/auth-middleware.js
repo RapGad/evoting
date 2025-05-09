@@ -9,7 +9,7 @@ const authMiddleware = async(req,res,next)=>{
     if(!token) return res.status(401).json({message: "Unauthorized access"})
 
     try {
-        const decodedInfo = jwt.verify(token, process.env.MY_SECRET)
+        const decodedInfo = jwt.verify(token, process.env.JWT_SECRET)
 
         req.user = decodedInfo
     
@@ -17,9 +17,9 @@ const authMiddleware = async(req,res,next)=>{
         
     } catch (error) {
         console.log(error)
-        return res.status(401).json({
+        return res.status(400).json({
             success: false,
-            message: 'internal server error'
+            message: 'Unexpected Error please log in again'
         })
         
     }
@@ -27,3 +27,5 @@ const authMiddleware = async(req,res,next)=>{
 
 
 }
+
+module.exports = authMiddleware

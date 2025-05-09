@@ -1,6 +1,7 @@
 const Student = require('../models/student')
 const Vote = require('../models/Vote')
 const Category = require('../models/Category')
+const Candidate = require('../models/Candidate')
 
 
 
@@ -35,15 +36,60 @@ const userVoting = async(req,res)=>{
 
 
 const createStuff = async(req,res)=>{
-    const {gender,indexNumber,name,hostel,phone,} = req.body
+    /* const {name , position,image} = req.body
     
+    const newCandidate = new Candidate({
+        name,position,image
+    })
+
+    await newCandidate.save() */
+
+   /*  const {name, icon } = req.body
+
+    const newCategory = new Category({
+        name,icon
+    })
+
+    await newCategory.save() */
+
+    const {name,phone,indexNumber,hostel} = req.body
+
     const newStudent = new Student({
-        name, indexNumber,gender,hostel,phone
+        name,phone,indexNumber,hostel
     })
 
     await newStudent.save()
 
-    return res.status(200).json({message: "Student created"})
+    return res.status(200).json({message: " added",success:true})
 }
 
-module.exports = {userVoting,createStuff}
+const getCategory = async(req,res)=>{
+
+    try {
+        const category = await Category.find({})
+        return res.status(200).json({category})
+    
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Internal Server error"})
+        
+    }
+
+
+}
+const getCandidate = async(req,res)=>{
+    try {
+        const {id} = req.query
+        const candidate = await Candidate.find({position: id}).populate("position","name")
+        res.status(200).json({candidate})
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "Internal Server error"})
+        
+    }
+
+}
+
+module.exports = {userVoting,createStuff,getCategory,getCandidate}
