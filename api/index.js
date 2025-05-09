@@ -10,7 +10,25 @@ const PORT = process.env.PORT || 5002
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+const allowedOrigins = [
+    'https://jah-register.netlify.app/',  // Replace with your actual frontend URL
+    'http://localhost:5173'               // Optional: for local development
+  ];
+  
+  const corsOptions = {
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  };
+  
+  app.use(cors(corsOptions));
 
 
 app.use('/api/auth' ,authRouter)
