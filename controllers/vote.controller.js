@@ -36,13 +36,13 @@ const userVoting = async(req,res)=>{
 
 
 const createStuff = async(req,res)=>{
-    /* const {name , position,image} = req.body
+    const {name , position,image} = req.body
     
     const newCandidate = new Candidate({
         name,position,image
     })
 
-    await newCandidate.save() */
+    await newCandidate.save()
 
    /*  const {name, icon } = req.body
 
@@ -52,13 +52,13 @@ const createStuff = async(req,res)=>{
 
     await newCategory.save() */
 
-    const {name,phone,indexNumber,hostel} = req.body
+/*     const {name,phone,indexNumber,hostel} = req.body
 
     const newStudent = new Student({
         name,phone,indexNumber,hostel
     })
 
-    await newStudent.save()
+    await newStudent.save() */
 
     return res.status(200).json({message: " added",success:true})
 }
@@ -92,4 +92,70 @@ const getCandidate = async(req,res)=>{
 
 }
 
-module.exports = {userVoting,createStuff,getCategory,getCandidate}
+const voteSummary = async(req,res)=>{
+    try {
+        const summary = await Vote.aggregate([
+          {
+            $group: {
+              _id: { categoryId: "$categoryId", candidateId: "$candidateId" },
+              totalVotes: { $sum: 1 }
+            }
+          },
+          {
+            $lookup: {
+              from: "candidates",
+              localField: "_id.candidateId",
+              foreignField: "_id",
+              as: "candidate"
+            }
+          },
+          { $unwind: "$candidate" },
+          {
+            $lookup: {
+              from: "categories",
+              localField: "_id.categoryId",
+              foreignField: "_id",
+              as: "category"
+            }
+          },
+          { $unwind: "$category" },
+    
+          // Group by category with all candidates
+          {
+            $group: {
+              _id: "$category._id",
+              categoryName: { $first: "$category.name" },
+              candidates: {
+                $push: {
+                  candidateId: "$candidate._id",
+                  candidateName: "$candidate.name",
+                  totalVotes: "$totalVotes"
+                }
+              },
+              categoryTotalVotes: { $sum: "$totalVotes" }
+            }
+          },
+          // Sort candidates by totalVotes within each category
+          {
+            $project: {
+              _id: 1,
+              categoryName: 1,
+              categoryTotalVotes: 1,
+              candidates: {
+                $sortArray: {
+                  input: "$candidates",
+                  sortBy: { totalVotes: -1 }
+                }
+              }
+            }
+          }
+        ]);
+    
+        res.status(200).json(summary);
+      } catch (error) {
+        console.error("Error getting vote summary:", error);
+        res.status(500).json({ message: 'Server error' });
+      }
+}
+
+module.exports = {userVoting,createStuff,getCategory,getCandidate,voteSummary}
