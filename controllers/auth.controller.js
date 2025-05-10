@@ -13,7 +13,7 @@ const verifyStudentId = async(req,res)=>{
         if(!studentId) return res.status(400).json({message: "Invalid student ID"})
     
 
-        const student = await Student.findOne({ indexNumber: studentId})
+        const student = await Student.find({ indexNumber: studentId})
         
         if(!student) return res.status(400).json({message: "Student ID not found"})
             
