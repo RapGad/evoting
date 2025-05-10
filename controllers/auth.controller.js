@@ -35,7 +35,7 @@ const sendOtp = async(req,res)=>{
         const student = await Student.findById({_id: id})
         if(!student) return res.status(400).json({message: "Error with student credentials "})
         
-        if(student.hasVoted.length === 16) return res.status(400).json({message: "Student Has already voted"})
+        //if(student.hasVoted.length === 16) return res.status(400).json({message: "Student Has already voted"})
     
     
         const otp = generateOtP()
@@ -47,8 +47,8 @@ const sendOtp = async(req,res)=>{
     
     
         //send OTP before saving
-        //const response = await sendOtpMessage(student.phone, message)
-        //if(!response.success) return res.status(400).json({message: "Code not sent"})
+        const response = await sendOtpMessage(student.phone, message)
+        if(!response.success) return res.status(400).json({message: "Code not sent"})
         console.log(otp)
         const newOtp = new Otp({
             indexNumber: student.indexNumber,
@@ -83,6 +83,7 @@ const verifyOtp = async( req, res)=>{
         if(!otp || !indexNumber) return res.status(400).json({message: "Otp or index number is required"})
         const sanitizedOtp = String(otp).trim()
         const sanitizedIndexNumber = String(indexNumber).trim() 
+        console.log(sanitizedIndexNumber)
 
         const otpRecord = await Otp.findOne({indexNumber:sanitizedIndexNumber}).sort({ createdAt: -1})
         if(!otpRecord) return res.status(403).json({ message: "Invalid index Number"})
