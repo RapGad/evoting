@@ -6,22 +6,25 @@ const Candidate = require('../models/Candidate')
 
 
 const userVoting = async(req,res)=>{
-    const { _id } = req.user
+    const { id } = req.user
     const { categoryId, candidateId } = req.body
 
 
     try {
-        const user = await Student.findOne({studentId: _id})
-        if(user.hasVoted.includes(categoryId)) return res.status(400).json({message: "User Has voted in this category"})
+        const user = await Student.findById(id)
+        console.log(user)
+        if (user.hasVoted.some(v => v.toString() === categoryId.toString())) {
+          return res.status(400).json({ message: "User has voted in this category" });
+      }
         
         const vote = new Vote({
-            studentId: _id,
+            studentId: id,
             categoryId,
             candidateId,
             votedAt: new Date()
         })
 
-        await Student.findByIdAndUpdate(user._id, {
+        await Student.findByIdAndUpdate(id, {
             $addToSet: { hasVoted: categoryId } // prevents duplicates
           });
         await vote.save()

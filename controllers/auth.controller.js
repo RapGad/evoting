@@ -47,7 +47,7 @@ const sendOtp = async(req,res)=>{
     
     
         //send OTP before saving
-        const response = await sendOtpMessage(student.phone, message)
+        //const response = await sendOtpMessage(student.phone, message)
         if(!response.success) return res.status(400).json({message: "Code not sent"})
         console.log(otp)
         const newOtp = new Otp({
