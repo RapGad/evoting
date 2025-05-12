@@ -10,10 +10,10 @@ const PORT = process.env.PORT || 5002
 
 const app = express()
 const allowedOrigins = [
-    'https://jah-register.netlify.app',  // Replace with your actual frontend URL
     'http://localhost:5173',               // Optional: for local development
     'http://localhost:5174',  
-    'https://evoting-view.netlify.app'             // Optional: for local development
+    'https://evoting-view.netlify.app',// Optional: for local development
+    'https://jah-new-reg.netlify.app'
   ];
   
 
