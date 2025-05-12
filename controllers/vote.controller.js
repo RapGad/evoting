@@ -40,13 +40,13 @@ const userVoting = async(req,res)=>{
 
 
 const createStuff = async(req,res)=>{
-    const {name , position,image} = req.body
+/*     const {name , position,image} = req.body
     
     const newCandidate = new Candidate({
         name,position,image
     })
 
-    await newCandidate.save()
+    await newCandidate.save() */
 
    /*  const {name, icon } = req.body
 
@@ -56,13 +56,13 @@ const createStuff = async(req,res)=>{
 
     await newCategory.save() */
 
-/*     const {name,phone,indexNumber,hostel} = req.body
+    const {name,phone,indexNumber,hostel} = req.body
 
     const newStudent = new Student({
         name,phone,indexNumber,hostel
     })
 
-    await newStudent.save() */
+    await newStudent.save()
 
     return res.status(200).json({message: " added",success:true})
 }
